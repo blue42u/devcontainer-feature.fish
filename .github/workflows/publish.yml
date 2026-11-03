@@ -12,17 +12,13 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Fish version to publish (e.g. 0.83.0). Empty for the latest release.
+        description: Fish version to publish (e.g. 4.9.3). Empty for the latest release.
         type: string
         default: ""
       force:
         description: Republish even if this version already exists in the registry.
         type: boolean
         default: false
-      verify-attestations:
-        description: Verify GitHub artifact attestations (unavailable for some older Fish releases).
-        type: boolean
-        default: true
   # Build (but never publish) to validate changes.
   pull_request:
   push:
@@ -122,7 +118,6 @@ jobs:
         if: steps.exists.outputs.skip != 'true'
         env:
           VERSION: ${{ steps.meta.outputs.version }}
-          VERIFY_ATTESTATIONS: ${{ github.event_name != 'workflow_dispatch' || inputs.verify-attestations }}
         run: |
           set -euo pipefail
           tag="$VERSION"
@@ -143,11 +138,12 @@ jobs:
 
             gh release download "$tag" --repo "$UPSTREAM" --dir downloads \
               --pattern "$archive"
-            # TODO: Figure out how to verify the downloaded binary
+            # TODO: Verify the download. Fish publishes no attestations or
+            # signatures for its Linux binaries, only for the source tarball.
 
             # Each archive contains a single "fish" executable.
             mkdir "downloads/$target"
-            tar -xzf "downloads/$archive" -C "downloads/$target" fish
+            tar -xJf "downloads/$archive" -C "downloads/$target" fish
             install -m 0755 "downloads/$target/fish" "build/dist/fish-$target"
           done <<< "$TARGETS"
 
@@ -207,7 +203,7 @@ jobs:
               "org.opencontainers.image.source": $source,
               "org.opencontainers.image.version": $version,
               "org.opencontainers.image.description": "Fish as a Devcontainer feature",
-              "org.opencontainers.image.licenses": "MIT AND BSD-3-Clause"
+              "org.opencontainers.image.licenses": "MIT AND GPL-2.0-only"
             }}' > annotations.json
           cat annotations.json
 

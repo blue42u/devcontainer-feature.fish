@@ -42,5 +42,5 @@ To select a specific version of Fish to install instead of the latest:
 
 | Options Id | Description | Type | Default Value |
 |-----|-----|-----|-----|
-| `overwrite` | Overwrite any existing `/usr/bin/fish` | boolean | `true` |
+| `overwrite` | Overwrite any existing `/usr/bin/fish` | boolean | `false` |
 | `updateShell` | Also set the remote user's default shell to Fish | boolean | `true` |

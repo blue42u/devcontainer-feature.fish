@@ -35,7 +35,7 @@ fi
 
 if [ "$UPDATESHELL" = "true" ]; then
   # Confirm Fish is allowed as a shell in /etc/shells
-  if ! grep -q "/usr/bin/fish" /etc/shells; then
+  if ! grep -qxF /usr/bin/fish /etc/shells; then
     echo '/usr/bin/fish' >> /etc/shells
   fi
 

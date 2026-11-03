@@ -1,0 +1,20 @@
+{
+  "id": "fish",
+  "version": "@VERSION@",
+  "name": "Fish",
+  "documentationURL": "https://fishshell.com/docs/current/index.html",
+  "licenseURL": "https://github.com/fish-shell/fish-shell/blob/master/COPYING",
+  "keywords": ["fish", "shell"],
+  "options": {
+    "overwrite": {
+      "description": "Overwrite any existing /usr/bin/fish",
+      "type": "boolean",
+      "default": false
+    },
+    "updateShell": {
+      "description": "Also set the remote user's default shell to Fish",
+      "type": "boolean",
+      "default": true
+    }
+  }
+}
